@@ -1,0 +1,50 @@
+    "vim.insertModeKeyBindings":[
+        
+    ],
+    "vim.normalModeKeyBindingsNonRecursive":[
+        {
+            "before":["W"],
+            "commands":[":w"]
+        },
+        {
+            "before":["Q"],
+            "commands":[":q"]
+        },
+        {
+            "before":["J"],
+            "after":["j","j","j","j","j"]
+        },
+        {
+            "before":["K"],
+            "after":["k","k","k","k","k"]
+        },
+        {
+            "before":["H"],
+            "after":["h","h","h","h","h","h","h","h"]
+        },
+        {
+            "before":["L"],
+            "after":["l","l","l","l","l","l","l","l"]
+        },
+        {
+            "before":["'","'"],
+            "after":["`","`"]
+        },
+        {
+            "before":["<C-r>"],
+            "after":["U"]
+        },
+        {
+            "before":["0"],
+            "after":["^"]
+        },
+        {
+            "before":["-"],
+            "after":["$"]
+        },
+    ],
+    "vim.handleKeys":{
+        "<C-a>": false,
+        "<C-f>": false,
+        "<C-n>": false
+    }
