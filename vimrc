@@ -92,7 +92,7 @@ endif
 " vim-plug
 call plug#begin('~/.vim/plugged')
 " Plug 'theniceboy/vim-deus'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'vim-airline/vim-airline'
 " Plug 'junegunn/seoul256.vim'
 Plug 'leezh-git/seoul256.vim'
@@ -108,5 +108,5 @@ set background=dark
 
 
 " iamcco/markdown-preview.nvim
-let g:mkdp_browser = 'chromium'
-map R :MarkdownPreview
+" let g:mkdp_browser = 'chromium'
+" map R :MarkdownPreview
