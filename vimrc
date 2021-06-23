@@ -20,7 +20,7 @@ set showcmd
 set wildmenu
 " 光标移动时会保留5行
 set scrolloff=5
-" 边输入边搜索
+" 边输入边搜索（增量搜索）
 set incsearch
 " 高亮搜索结果
 set hlsearch
