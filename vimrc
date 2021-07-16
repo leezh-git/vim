@@ -1,112 +1,116 @@
-" 不以兼容模式运行
-set nocompatible
-" 显示行号
+" 设置leader键
+let mapleader = " "
+
+" 通用设置
+colorscheme industry
 set nu
-" set relativenumber
-" 缩进
-set cindent
-" 自动缩排（下排跟随上排缩进）
-" set autoindent
-" 输入闭括号时，高亮开括号
-set showmatch
-" 左右滚动 和 达到右边界时滚动的字符数
-" set nowrap
-" set sidescroll=10
-" 光标行显示一条线
-set cursorline
-" 右下角显示命令
+set relativenumber
 set showcmd
-" 补全时显示相关命令
 set wildmenu
-" 光标移动时会保留5行
 set scrolloff=5
-" 边输入边搜索（增量搜索）
-set incsearch
-" 高亮搜索结果
-set hlsearch
-" 智能搜索/忽略大小写搜索
-" set smartcase
-" set ignorecast
-" 不现实左下角的“插入”提示
-" set noshowmode
-" 高亮
-syntax on
+set laststatus=2
+set history=200
+"set cursorline
+set showmatch
+set mouse=a
 
-" 颜色主题
-" colorscheme zellner
-colorscheme torte
-" colorscheme desert
-" colorscheme elflord
-" colorscheme industry
-" colorscheme ron
-" colorscheme slate
+" 保存和退出
+map Q :q<CR>
+map W :w<CR>
 
-" Ctrl+q > 不保存退出
-" Shift+w > 保存
-" Shift+q > 退出退出
-" Ctrl+l/h > 激活右/左边窗口
-" Ctrl+f > 替换
-" Ctrl+y/p > 复制/粘贴系统剪贴板
-" HJKL可以较大幅度移动
-" '' > 快速返回刚才的位置
-" Ctrl+n > 关闭搜索高亮
-" 0 > 行开头
-" - > 行结尾
-map  :q!
-map W :w
-map Q :q
-map  l
-map  h
-map  :%s//gcODODOD
-noremap  "+y
-noremap  "+p
+" 移动和映射
+noremap H 8h
 noremap J 5j
 noremap K 5k
-noremap H 8h
-noremap L 8l
-noremap '' ``
-map  :nohlsearch
-noremap 0 ^
-noremap - $
-noremap U 
+noremap L 5l
+noremap z zz
+noremap e ea
+noremap 9 (
+noremap 0 )
+noremap - ^
+noremap = $
+noremap ' ;
+noremap ; ,
 
-" Ctrl+r > 重新加载配置文件
-map  :source $MYVIMRC
+" 复制、粘贴
+noremap <leader>y "zy
+noremap <leader>d "zd
+noremap <leader>p "zp
+noremap <leader>P "zP
 
-" markdown的快捷操作（插入模式）
-" ,b > 加粗
-" ,i > 倾斜
-" ,, > 结束
-map! ,b ****<leezh>8hi
-map! ,i **<leezh>7hi
-map! ,, /<leezh>:nohlsearch7cl
-
-
-
-" 检测vim-plug有没有安装
-if empty(glob('~/.vim/autoload/plug.vim'))
-	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-" vim-plug
-call plug#begin('~/.vim/plugged')
-" Plug 'theniceboy/vim-deus'
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'vim-airline/vim-airline'
-" Plug 'junegunn/seoul256.vim'
-Plug 'leezh-git/seoul256.vim'
-" Plug 'connorholyday/vim-snazzy'
-call plug#end()
-
-" theniceboy/vim-deus
-" color deus
-
-" junegunn/seoul256.vim
-color seoul256
-set background=dark
+" 搜索、替换
+set incsearch
+set hlsearch
+map <c-n> :nohlsearch<CR>
+map <c-f> :%s//gcODODOD
 
 
-" iamcco/markdown-preview.nvim
-" let g:mkdp_browser = 'chromium'
-" map R :MarkdownPreview
+" 回到上次编辑的位置
+autocmd BufRead * execute "normal! `\""
+
+
+" 	多窗口编辑
+" Ctrl+e 	打开新窗口
+" Ctrl+h或l 	改变活动窗口
+" Ctrl+>或< 	改变窗口大小
+map <c-e> :vsplit<CR><c-w>l:e 
+noremap <c-h> <c-w>h
+noremap <c-l> <c-w>l
+noremap <c-j> <c-w><
+noremap <c-k> <c-w>>
+
+
+"	分页编辑
+" leader+a	打开新分页
+" leader+c	关闭其他分页
+" t或者T	切换分页
+map <leader>a :tabnew<CR>:e 
+map <leader>c :tabonly<CR>
+map t :tabnext<CR>
+map T :tabprevious<CR>
+
+
+"	自动缩进
+" 仅设置了python和c
+function AutoIndent()
+	if &filetype == "python"
+		set smartindent
+		set autoindent
+		set expandtab
+		set shiftwidth=4
+		set softtabstop=4
+		set nocindent
+	elseif &filetype == "c"
+		set cindent
+		set shiftwidth=8
+		set softtabstop=0
+		set nosmartindent
+		set noautoindent
+		set noexpandtab
+	else
+		set smartindent
+		set autoindent
+		set shiftwidth=8
+		set softtabstop=0
+		set nocindent
+		set noexpandtab
+	endif
+endfunction
+autocmd BufRead,BufNewFile * call AutoIndent()
+
+
+"	检测新文件的类型
+augroup CheckFileType_g
+autocmd CursorMovedI * call CheckFileType()
+augroup END
+function CheckFileType()
+	if exists("b:count") == 0
+		let b:count = 0
+	endif
+	let b:count += 1
+	if &filetype == "" && b:count > 20 && b:count < 200
+		filetype detect
+	elseif b:count >= 200 || &filetype != ""
+		autocmd! CheckFileType_g
+	endif
+endfunction
