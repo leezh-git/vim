@@ -23,14 +23,11 @@ noremap H 8h
 noremap J 5j
 noremap K 5k
 noremap L 5l
-noremap z zz
 noremap e ea
-noremap 9 (
-noremap 0 )
+noremap [ (
+noremap ] )
 noremap - ^
 noremap = $
-noremap ' ;
-noremap ; ,
 
 " 复制、粘贴
 noremap <leader>y "zy
@@ -42,7 +39,8 @@ noremap <leader>P "zP
 set incsearch
 set hlsearch
 map <c-n> :nohlsearch<CR>
-map <c-f> :%s//gcODODOD
+"map <c-f> :%s//gcODODOD
+map <c-f> :%s//gc<Left><Left><Left>
 
 
 " 回到上次编辑的位置
@@ -70,12 +68,16 @@ map t :tabnext<CR>
 map T :tabprevious<CR>
 
 
+"	折叠设置
+set foldcolumn=1
+set foldmethod=marker
+
+
 "	自动缩进
 " 仅设置了python和c
 function AutoIndent()
 	if &filetype == "python"
 		set smartindent
-		set autoindent
 		set expandtab
 		set shiftwidth=4
 		set softtabstop=4
@@ -85,11 +87,9 @@ function AutoIndent()
 		set shiftwidth=8
 		set softtabstop=0
 		set nosmartindent
-		set noautoindent
 		set noexpandtab
 	else
 		set smartindent
-		set autoindent
 		set shiftwidth=8
 		set softtabstop=0
 		set nocindent
@@ -114,3 +114,14 @@ function CheckFileType()
 		autocmd! CheckFileType_g
 	endif
 endfunction
+
+
+"	固定格式输入
+function DefultInput()
+	"call setline(line("."), "this is setline")
+	call append(line(".")+0, "this is 0")
+	call append(line(".")+1, "this is 1")
+	call append(line(".")+2, "this is 2")
+	call append(line(".")+3, "this is 3")
+endfunction
+ab dfit <ESC>:call DefultInput()<CR>
