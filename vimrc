@@ -10,9 +10,9 @@ set wildmenu
 set scrolloff=5
 set laststatus=2
 set history=200
-"set cursorline
-set showmatch
 set mouse=a
+"set cursorline
+"autocmd BufRead,BufNewFile * execute "NoMatchParen"
 
 " 保存和退出
 map Q :q<CR>
@@ -51,7 +51,7 @@ autocmd BufRead * execute "normal! `\""
 " Ctrl+e 	打开新窗口
 " Ctrl+h或l 	改变活动窗口
 " Ctrl+>或< 	改变窗口大小
-map <c-e> :vsplit<CR><c-w>l:e 
+map <c-e> :vsplit<CR><c-w>l:find .<CR>
 noremap <c-h> <c-w>h
 noremap <c-l> <c-w>l
 noremap <c-j> <c-w><
@@ -62,7 +62,7 @@ noremap <c-k> <c-w>>
 " leader+a	打开新分页
 " leader+c	关闭其他分页
 " t或者T	切换分页
-map <leader>a :tabnew<CR>:e 
+map <leader>a :tabnew<CR>:find .<CR>
 map <leader>c :tabonly<CR>
 map t :tabnext<CR>
 map T :tabprevious<CR>
@@ -125,3 +125,73 @@ function DefultInput()
 	call append(line(".")+3, "this is 3")
 endfunction
 ab dfit <ESC>:call DefultInput()<CR>
+
+
+"	括号补全
+inoremap ( ()<LEFT>
+inoremap [ []<LEFT>
+inoremap { {}<LEFT>
+inoremap ) <C-R>=ClosePair(")")<CR>
+inoremap ] <C-R>=ClosePair("]")<CR>
+inoremap } <C-R>=ClosePair("}")<CR>
+inoremap ' <C-R>=Qmark1()<CR>
+inoremap " <C-R>=Qmark2()<CR>
+inoremap <BS> <C-R>=RemovePairs()<CR>
+inoremap <CR> <C-R>=EnterBrace()<CR>
+
+function Qmark1()
+	if getline(".")[col(".")-1] == "'"
+		return "\<RIGHT>"
+	else
+		return "''\<LEFT>"
+endfunction
+
+function Qmark2()
+	if getline(".")[col(".")-1] == "\""
+		return "\<RIGHT>"
+	else
+		if getline(".")[col(".")] == "\$"
+			return "\""
+		else
+			return "\"\"\<LEFT>"
+endfunction
+
+function ClosePair(char)
+	if getline(".")[col(".")-1] == a:char
+		return "\<RIGHT>"
+	else
+		return a:char
+	endif
+endfunction
+
+function RemovePairs()
+	let l:current_char = getline(".")[col(".")-1]
+	let l:pervious_char = getline(".")[col(".")-2]
+	if l:current_char == "'" && l:pervious_char == "'"
+		return "\<DELETE>\<BS>"
+	elseif l:current_char == "\"" && l:pervious_char == "\""
+		return "\<DELETE>\<BS>"
+	elseif l:current_char == ")" && l:pervious_char == "("
+		return "\<DELETE>\<BS>"
+	elseif l:current_char == "]" && l:pervious_char == "["
+		return "\<DELETE>\<BS>"
+	elseif l:current_char == "}" && l:pervious_char == "{"
+		return "\<DELETE>\<BS>"
+	else
+		return "\<BS>"
+	endif
+endfunction
+
+function EnterBrace()
+	let l:current_char = getline(".")[col(".")-1]
+	let l:pervious_char = getline(".")[col(".")-2]
+	if l:current_char == "}" && l:pervious_char == "{"
+		return "\<CR>\<ESC>ko"
+	else
+		return "\<CR>"
+endfunction
+
+
+"	增加空行
+noremap <leader>o o<ESC>
+noremap <leader>O O<ESC>
