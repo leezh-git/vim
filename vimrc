@@ -11,7 +11,9 @@ set scrolloff=5
 set laststatus=2
 set history=200
 set mouse=a
-"set cursorline
+set cursorline
+hi CursorLine NONE ctermbg=241
+hi CursorLineNr NONE ctermbg=241
 "autocmd BufRead,BufNewFile * execute "NoMatchParen"
 
 " 保存和退出
@@ -39,9 +41,12 @@ noremap <leader>P "zP
 set incsearch
 set hlsearch
 map <c-n> :nohlsearch<CR>
-"map <c-f> :%s//gcODODOD
-map <c-f> :%s//gc<Left><Left><Left>
+map <c-f> :%s//gc<LEFT><LEFT><LEFT>
 
+" 显示空格和tab
+set list
+set listchars=tab:>->,space:_
+hi SpecialKey ctermfg=241
 
 " 回到上次编辑的位置
 autocmd BufRead * execute "normal! `\""
@@ -195,3 +200,18 @@ endfunction
 "	增加空行
 noremap <leader>o o<ESC>
 noremap <leader>O O<ESC>
+
+
+"	编译和运行
+"	包含c、python
+"	Shift+e	编译
+"	Shift+r	运行
+function RunProgram()
+	if &filetype == "python"
+		noremap R :!python3 %<CR>
+	elseif &filetype == "c"
+		noremap E :!gcc %<CR>
+		noremap R :!./a.out<CR>
+	endif
+endfunction
+autocmd BufRead,BufNewFile * call RunProgram()
