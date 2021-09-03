@@ -44,8 +44,9 @@ map <c-n> :nohlsearch<CR>
 map <c-f> :%s//gc<LEFT><LEFT><LEFT>
 
 " 显示空格和tab
+"˙ˋ゜゛ɑθεεΘΟοо▫◽◾﹡﹢
 set list
-set listchars=tab:>->,space:_
+set listchars=tab:>-,space:▫
 hi SpecialKey ctermfg=241
 
 " 回到上次编辑的位置
